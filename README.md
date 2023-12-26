@@ -19,4 +19,10 @@ Setup:
      https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/
      https://kubernetes.io/de/docs/tasks/tools/install-minikube/ (DE)
 
-6. 
+6. Make a free account and get an API-KEY at OpenWeather
+     https://openweathermap.org/
+
+7. Replace the key in line XY in weather.py with your API-KEY:
+     api_key = 'YOUR_API_KEY'
+     api_endpoint = 'http://api.openweathermap.org/data/2.5/weather'
+
