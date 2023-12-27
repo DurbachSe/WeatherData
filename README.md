@@ -32,3 +32,5 @@ Setup:
 
    Start Zookeeper: /usr/local/bin/zookeeper-server-start /usr/local/etc/zookeeper/zoo.cfg
    Start Kafka: /usr/local/bin/kafka-server-start /usr/local/etc/kafka/server.properties
+   Create topic: /zsr/local/bin/kafka-topics --create --topic weather-data --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
