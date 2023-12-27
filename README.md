@@ -26,6 +26,9 @@ Setup:
      api_key = 'YOUR_API_KEY'
      api_endpoint = 'http://api.openweathermap.org/data/2.5/weather'
 
-8. Install Kafka:
+8. Install Kafka (and Zookeeper):
    https://kafka.apache.org/downloads
    https://www.conduktor.io/kafka/how-to-install-apache-kafka-on-mac-with-homebrew/ (Mac OS)
+
+   Start Zookeeper: /usr/local/bin/zookeeper-server-start /usr/local/etc/zookeeper/zoo.cfg
+   Start Kafka: /usr/local/bin/kafka-server-start /usr/local/etc/kafka/server.properties
