@@ -1,9 +1,11 @@
 import requests
 import time
+import os
 from kafka import KafkaProducer #This may generate some problems with python 3.12:https://github.com/dpkp/kafka-python/issues/2412
+from secret import OPENWEATHERMAP_API_KEY
 
-#Weather API
-api_key = "2757869ff651e99b37e1979fcf3119b0"
+# Get the OpenWeatherMap API key from the environment variable
+api_key = OPENWEATHERMAP_API_KEY
 api_endpoint = "http://api.openweathermap.org/data/2.5/weather"
 city_name = "Larochette, LU"
 
