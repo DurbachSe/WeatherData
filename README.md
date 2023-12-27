@@ -22,7 +22,10 @@ Setup:
 6. Make a free account and get an API-KEY at OpenWeather
      https://openweathermap.org/
 
-7. Replace the key in line XY in weather.py with your API-KEY:
+7. Replace the key in line 5 in weather_processor.py with your API-KEY:
      api_key = 'YOUR_API_KEY'
      api_endpoint = 'http://api.openweathermap.org/data/2.5/weather'
 
+8. Install Kafka:
+   https://kafka.apache.org/downloads
+   https://www.conduktor.io/kafka/how-to-install-apache-kafka-on-mac-with-homebrew/ (Mac OS)
