@@ -1,2 +1,20 @@
+certifi==2023.11.17
+charset-normalizer==2.0.12
+contourpy==1.2.0
+cycler==0.12.1
+fonttools==4.47.0
+idna==3.6
+kafka-python @ git+https://github.com/dpkp/kafka-python.git@b68f61d49556377bf111bebb82f8f2bd360cc6f7
+kiwisolver==1.4.5
+matplotlib==3.8.2
+numpy==1.26.2
+packaging==23.2
+Pillow==10.1.0
+pyparsing==3.1.1
+python-dateutil==2.8.2
+python-decouple==3.8
+python-dotenv==1.0.0
 requests==2.26.0
-kafka-python==2.0.2
+six==1.16.0
+tk==0.1.0
+urllib3==1.26.18
