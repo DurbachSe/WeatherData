@@ -31,6 +31,14 @@ Setup:
    Start Kafka: /usr/local/bin/kafka-server-start /usr/local/etc/kafka/server.properties
    Create topic: /zsr/local/bin/kafka-topics --create --topic weather-data --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
 
+   Optionally you can start kafka via a bash script as provided with start_kafka.sh. You can change all paths and parameters as needed for your setup.
+   You may need to give the script permissions to run, as for example with:
+   chmod +x start_kafka.sh
+   xattr -d com.apple.quarantine start_kafka.sh
+
+   To run the script simply use following command:
+   ./start_kafka.sh   
+
 9. Get your Weather data API-Key (https://home.openweathermap.org/api_keys):
-     create in the same folder a secret.py including your API-Key. The content looks like this: OPENWEATHERMAP_API_KEY="PasteYourKey"
+   create in the same folder a secret.py including your API-Key. The content looks like this: OPENWEATHERMAP_API_KEY="PasteYourKey"
 
