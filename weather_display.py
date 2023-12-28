@@ -3,21 +3,33 @@ import threading
 import json
 import time
 import re
-from kafka import KafkaConsumer
+from kafka import KafkaConsumer, TopicPartition
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from matplotlib.figure import Figure
+from datetime import datetime
 
 kafka_bootstrap_servers = 'localhost:9092'
 kafka_topic = 'weather-data'
 
 # Create Kafka consumer
 consumer = KafkaConsumer(
-    kafka_topic,
+    #kafka_topic,
     bootstrap_servers=kafka_bootstrap_servers,
-    auto_offset_reset='earliest',
-    group_id='weather-consumer',
+    #auto_offset_reset='earliest',
+    #group_id='weather-consumer',
     value_deserializer=lambda x: x.decode('utf-8')
 )
+
+subscribe_from_beginning = True
+
+# Manually assign partitions for your specific topic
+partitions = [TopicPartition(kafka_topic, partition) for partition in range(3)]  # Adjust the range accordingly
+consumer.assign(partitions)
+
+# Reset the offset to the beginning for each assigned partition
+if subscribe_from_beginning:
+    for partition in partitions:
+        consumer.seek_to_beginning(partition)
 
 # Create Tkinter window
 window = tk.Tk()
@@ -26,7 +38,7 @@ window.geometry('800x600')  # Set window size
 
 # Create Figure for the Matplotlib graph
 fig = Figure(figsize=(6, 5), dpi=100)
-fig.subplots_adjust(bottom=0.2)  # Adjust the bottom margin to leave more space
+fig.subplots_adjust(bottom=0.3)  # Adjust the bottom margin to leave more space
 ax = fig.add_subplot(111)
 ax.set_xlabel('Time')
 ax.set_ylabel('Temperature (°C)')
@@ -67,19 +79,21 @@ def update_display():
             current_time = time.strftime("%H:%M:%S")
 
             # Extract numerical values using regular expressions
+            datetime_match = re.search(r'(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})', message_text)
             temperature_match = re.search(r'Temperature: ([-+]?\d*\.\d+|\d+)', message_text)
             humidity_match = re.search(r'Humidity: ([-+]?\d*\.\d+|\d+)', message_text)
             description_match = re.search(r'Description: (.+)', message_text)
 
             # Convert temperature and humidity to numbers, set to 'N/A' if not valid
+            current_datetime = datetime_match.group(1) if datetime_match else 'N/A'
             temperature = float(temperature_match.group(1)) if temperature_match else 'N/A'
             humidity = float(humidity_match.group(1)) if humidity_match else 'N/A'
             description = description_match.group(1) if description_match else 'N/A'
 
-            print(f'Received: Time={current_time}, Temperature={temperature}, Humidity={humidity}, Description={description}')
+            print(f'Received: Time={current_datetime}, Temperature={temperature}, Humidity={humidity}, Description={description}')
 
             # Append data to lists
-            time_data.append(current_time)
+            time_data.append(current_datetime)
             temperature_data.append(temperature)
             humidity_data.append(humidity)
 
@@ -102,7 +116,7 @@ def update_display():
 
             ax.set_xlabel('Time')
             ax.set_ylabel('Temperature (°C)', color='blue')
-            ax.legend(loc='upper left')
+            #ax.legend(loc='upper left')
 
             # Set x-axis ticks to display every n-th timestamp
             n = max(1, len(time_data) // max_timestamps)  # Avoid division by zero

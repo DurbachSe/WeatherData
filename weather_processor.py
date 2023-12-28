@@ -1,6 +1,7 @@
 import requests
 import time
 import os
+from datetime import datetime
 from kafka import KafkaProducer #This may generate some problems with python 3.12:https://github.com/dpkp/kafka-python/issues/2412
 from secret import OPENWEATHERMAP_API_KEY
 
@@ -34,8 +35,11 @@ def fetch_weather_data():
     humidity = weather_data['main']['humidity']
     description = weather_data['weather'][0]['description']
 
+    # Generate a human-readable timestamp
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
     #Produce Message to Kafka topic
-    message = f'Temperature: {"%.2f" % temperature}°C, Humidity: {humidity}%, Description: {description}'
+    message = f'Time: {timestamp}, Temperature: {"%.2f" % temperature}°C, Humidity: {humidity}%, Description: {description}'
     #print (message)
     return message
 
