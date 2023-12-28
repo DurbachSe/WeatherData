@@ -32,7 +32,7 @@ Setup:
    Create topic: /zsr/local/bin/kafka-topics --create --topic weather-data --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
 
    Optionally you can start kafka via a bash script as provided with start_kafka.sh. You can change all paths and parameters as needed for your setup.
-   You may need to give the script permissions to run, as for example with:
+   You may need to give the script permissions to run, as for example with (Mac OS):
    chmod +x start_kafka.sh
    xattr -d com.apple.quarantine start_kafka.sh
 
