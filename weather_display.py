@@ -10,7 +10,7 @@ from matplotlib.figure import Figure
 kafka_bootstrap_servers = 'localhost:9092'
 kafka_topic = 'weather-data'
 
-#Create Kafka consumer
+# Create Kafka consumer
 consumer = KafkaConsumer(
     kafka_topic,
     bootstrap_servers=kafka_bootstrap_servers,
@@ -19,16 +19,22 @@ consumer = KafkaConsumer(
     value_deserializer=lambda x: x.decode('utf-8')
 )
 
-#Create Tkinter window
+# Create Tkinter window
 window = tk.Tk()
 window.title('Weather Data Consumer')
-window.geometry('500x500+500+400')  # Set window size and position
+window.geometry('800x600')  # Set window size
 
 # Create Figure for the Matplotlib graph
-fig = Figure(figsize=(5, 4), dpi=100)
+fig = Figure(figsize=(6, 5), dpi=100)
+fig.subplots_adjust(bottom=0.2)  # Adjust the bottom margin to leave more space
 ax = fig.add_subplot(111)
 ax.set_xlabel('Time')
-ax.set_ylabel('Value')
+ax.set_ylabel('Temperature (°C)')
+
+# Create a secondary y-axis for humidity
+ax2 = ax.twinx()
+ax2.set_ylabel('Humidity (%)', color='green')
+ax2.tick_params(axis='y', labelcolor='green')
 
 # Create Tkinter canvas for embedding the Matplotlib graph
 canvas = FigureCanvasTkAgg(fig, master=window)
@@ -40,8 +46,14 @@ time_data = []
 temperature_data = []
 humidity_data = []
 
-#Create Tkinter text widget to display weather data
-text_widget = tk.Text(window, height=10, width=80)
+# Set minimum ranges for axes
+min_temperature_range = 5.0
+min_humidity_range = 10.0
+data_offset = 1
+max_timestamps = 8
+
+# Create Tkinter text widget to display weather data
+text_widget = tk.Text(window, height=10, width=120)
 text_widget.pack()
 
 # Function to update the Matplotlib graph and text widget with weather data
@@ -57,12 +69,14 @@ def update_display():
             # Extract numerical values using regular expressions
             temperature_match = re.search(r'Temperature: ([-+]?\d*\.\d+|\d+)', message_text)
             humidity_match = re.search(r'Humidity: ([-+]?\d*\.\d+|\d+)', message_text)
+            description_match = re.search(r'Description: (.+)', message_text)
 
             # Convert temperature and humidity to numbers, set to 'N/A' if not valid
             temperature = float(temperature_match.group(1)) if temperature_match else 'N/A'
             humidity = float(humidity_match.group(1)) if humidity_match else 'N/A'
+            description = description_match.group(1) if description_match else 'N/A'
 
-            print(f'Received: Time={current_time}, Temperature={temperature}, Humidity={humidity}')
+            print(f'Received: Time={current_time}, Temperature={temperature}, Humidity={humidity}, Description={description}')
 
             # Append data to lists
             time_data.append(current_time)
@@ -71,40 +85,52 @@ def update_display():
 
             # Update the Matplotlib graph with separate y-axes
             ax.clear()
+
+            # Set minimum range for temperature axis
+            temperature_data_range = max(temperature_data) - min(temperature_data)
+            temperature_axis_min = min(temperature_data) - max(0, min_temperature_range - temperature_data_range / 2)+data_offset
+            temperature_axis_max = max(temperature_data) + max(0, min_temperature_range - temperature_data_range / 2)+data_offset
+            ax.set_ylim(temperature_axis_min, temperature_axis_max)
             ax.plot(time_data, temperature_data, label='Temperature (°C)', color='blue')
-            
-            # Create a secondary y-axis for humidity
-            ax2 = ax.twinx()
+
+            # Set minimum range for humidity axis
+            humidity_data_range = max(humidity_data) - min(humidity_data)
+            humidity_axis_min = min(humidity_data) - max(0, min_humidity_range - humidity_data_range / 2)-data_offset
+            humidity_axis_max = max(humidity_data) + max(0, min_humidity_range - humidity_data_range / 2)-data_offset
+            ax2.set_ylim(humidity_axis_min, humidity_axis_max)
             ax2.plot(time_data, humidity_data, label='Humidity (%)', color='green')
-            ax2.set_ylabel('Humidity (%)', color='green')
-            ax2.tick_params(axis='y', labelcolor='green')
-            
+
             ax.set_xlabel('Time')
             ax.set_ylabel('Temperature (°C)', color='blue')
             ax.legend(loc='upper left')
-            
+
+            # Set x-axis ticks to display every n-th timestamp
+            n = max(1, len(time_data) // max_timestamps)  # Avoid division by zero
+            ax.set_xticks(time_data[::n])
+            ax.set_xticklabels(time_data[::n], rotation=45, ha='right')  # Adjust rotation and alignment as needed
+
             # Redraw the canvas
             canvas.draw()
 
             # Update the Tkinter text widget
-            text_widget.insert(tk.END, f'Time: {current_time}, Temperature: {temperature}°C, Humidity: {humidity}%\n')
+            text_widget.insert(tk.END, f'Time: {current_time}, Temperature: {temperature}°C, Humidity: {humidity}%, Description: {description}\n')
             text_widget.see(tk.END)  # Scroll to the end
 
         except Exception as e:
             print(f"Error processing message: {e}, Raw message: {message.value}")
-            
+
 # Use threading to run Kafka message consumption in a separate thread
 kafka_thread = threading.Thread(target=update_display)
 kafka_thread.start()
 
-#Use Tkinter after method to periodically update the text widget
+# Use Tkinter after method to periodically update the text widget
 def periodic_update():
     window.after(1000, periodic_update)  # Update every 1000 milliseconds (1 second)
 
-#Start periodic updates
+# Start periodic updates
 periodic_update()
 
-#Run the Tkinter event loop
+# Run the Tkinter event loop
 window.mainloop()
 
 # Close the Kafka consumer when the Tkinter window is closed
