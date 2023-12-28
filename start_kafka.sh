@@ -11,6 +11,8 @@ $kafka_path/bin/kafka-server-start $kafka_path/etc/kafka/server.properties &
 # Wait for services to start
 sleep 5
 
-# Create Kafka Topic
+# Delete existing and create new Kafka Topic
 kafka_topic=weather-data
-$kafka_path/bin/kafka-topics.sh --create --topic $kafka_topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+$kafka_path/bin/kafka-topics --delete --topic $kafka_topic --bootstrap-server localhost:9092
+$kafka_path/bin/kafka-topics --create --topic $kafka_topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
