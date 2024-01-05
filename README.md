@@ -44,16 +44,21 @@ Setup:
 10. Get your Weather data API-Key (https://home.openweathermap.org/api_keys):
    create in the same folder a secret.py including your API-Key. The content looks like this: OPENWEATHERMAP_API_KEY="PasteYourKey"
 
-11. Create Minikube Context:
+11. Build dockerfiles:
+    docker build PoducerDockerfile.txt .
+    docker build ConsumerDockerfile.txt .
+    docker build KafkaDockerfile.txt .
+
+13. Create Minikube Context:
     minikube start --driver=virtualbox #Change to other virtualization software if needed
     On MscOS thhere arre known issues, folloe the instructions of the error message or try to use docker as driver:
     minikube start --driver=docker (make sure docker is runing)
 
-12. Apply Kubernetes manifests:
+14. Apply Kubernetes manifests:
     kubectl apply -f producer-deployment.yaml
     kubectl apply -f consumer-deployment.yaml
     kubectl apply -f kafka-deployment.yaml
 
-13. Acces minikube dashboard
+15. Acces minikube dashboard
     minikube dashboard
 
