@@ -39,6 +39,11 @@ Setup:
    To run the script simply use following command:
    ./start_kafka.sh   
 
-9. Get your Weather data API-Key (https://home.openweathermap.org/api_keys):
+9. Install Virtualbox: https://www.virtualbox.org/ (or similar virtualization software like VMWare)
+
+10. Get your Weather data API-Key (https://home.openweathermap.org/api_keys):
    create in the same folder a secret.py including your API-Key. The content looks like this: OPENWEATHERMAP_API_KEY="PasteYourKey"
+
+11. Create Minikube Context:
+    minikube start --driver=virtualbox #Change to other virtualization software if needed
 
