@@ -48,6 +48,7 @@ Setup:
     docker build PoducerDockerfile.txt .
     docker build ConsumerDockerfile.txt .
     docker build KafkaDockerfile.txt .
+    docker compose?
 
 13. Create Minikube Context:
     minikube start --driver=virtualbox #Change to other virtualization software if needed
