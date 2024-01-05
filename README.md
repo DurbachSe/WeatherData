@@ -46,4 +46,14 @@ Setup:
 
 11. Create Minikube Context:
     minikube start --driver=virtualbox #Change to other virtualization software if needed
+    On MscOS thhere arre known issues, folloe the instructions of the error message or try to use docker as driver:
+    minikube start --driver=docker (make sure docker is runing)
+
+12. Apply Kubernetes manifests:
+    kubectl apply -f producer-deployment.yaml
+    kubectl apply -f consumer-deployment.yaml
+    kubectl apply -f kafka-deployment.yaml
+
+13. Acces minikube dashboard
+    minikube dashboard
 
