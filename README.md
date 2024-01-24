@@ -1,4 +1,5 @@
-Project to display OpenWeather Data. This is an educational project and does not represent a "best practice".
+Project to display OpenWeather Data using Apache Kafka, suited as basic example for Kafka.
+The folder Docker contains everything needed to run the project inside Docker containers. This might be educational for other projects involving two docker services communicating trough kafka and using secret keys inside docker.
 
 Setup:
 
