@@ -1,0 +1,4 @@
+# Use an official Kafka image
+FROM wurstmeister/kafka:2.12-2.3.0
+
+# Add custom configurations if needed
