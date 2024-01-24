@@ -1,65 +1,17 @@
-Project to display OpenWeather Data. This is an educational project and does not represent a "best practice".
+Project to display OpenWeather Data. This is an extension to the README in the main project folder, if you want to run the scripts as docker services.
 
 Setup:
 
-1. Install python:
-     https://www.python.org/
+1. Do at least step 4 described in the main README. You can do the other steps to get started if needed.
 
-2. Create a virtual environment (optional):
-     python -m venv venv      # Create a virtual environment named "env" at the current location
-     source venv/bin/activate  # Activates the created virtual environment | On Windows, use `venv\Scripts\activate`
 
-3. Install all dependencies listed in the requirements file via pip:
-     pip3 install -r requirements.txt
+2. Setup Docker:
+	https://docs.docker.com/engine/install/
 
-4. Setup Docker:
-     https://docs.docker.com/engine/install/
-   
-5. Install Kubernetes usingMinikube:
-     https://kubernetes.io/docs/tasks/tools/install-kubectl-macos/
-     https://kubernetes.io/de/docs/tasks/tools/install-minikube/ (DE)
+3. Build dockerfiles:
+	docker build PoducerDockerfile.txt .
+	docker build ConsumerDockerfile.txt .
+	docker build KafkaDockerfile.txt .
 
-6. Make a free account and get an API-KEY at OpenWeather
-     https://openweathermap.org/
-
-7. Install Kafka (and Zookeeper):
-   https://kafka.apache.org/downloads
-   https://www.conduktor.io/kafka/how-to-install-apache-kafka-on-mac-with-homebrew/ (Mac OS)
-   
-8. Start local Kafka
-   Start Zookeeper: /usr/local/bin/zookeeper-server-start /usr/local/etc/zookeeper/zoo.cfg
-   Start Kafka: /usr/local/bin/kafka-server-start /usr/local/etc/kafka/server.properties
-   Create topic: /zsr/local/bin/kafka-topics --create --topic weather-data --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
-
-   Optionally you can start kafka via a bash script as provided with start_kafka.sh. You can change all paths and parameters as needed for your setup.
-   You may need to give the script permissions to run, as for example with (Mac OS):
-   chmod +x start_kafka.sh
-   xattr -d com.apple.quarantine start_kafka.sh
-
-   To run the script simply use following command:
-   ./start_kafka.sh   
-
-9. Install Virtualbox: https://www.virtualbox.org/ (or similar virtualization software like VMWare)
-
-10. Get your Weather data API-Key (https://home.openweathermap.org/api_keys):
-   create in the same folder a secret.py including your API-Key. The content looks like this: OPENWEATHERMAP_API_KEY="PasteYourKey"
-
-11. Build dockerfiles:
-    docker build PoducerDockerfile.txt .
-    docker build ConsumerDockerfile.txt .
-    docker build KafkaDockerfile.txt .
-    docker compose?
-
-13. Create Minikube Context:
-    minikube start --driver=virtualbox #Change to other virtualization software if needed
-    On MscOS thhere arre known issues, folloe the instructions of the error message or try to use docker as driver:
-    minikube start --driver=docker (make sure docker is runing)
-
-14. Apply Kubernetes manifests:
-    kubectl apply -f producer-deployment.yaml
-    kubectl apply -f consumer-deployment.yaml
-    kubectl apply -f kafka-deployment.yaml
-
-15. Acces minikube dashboard
-    minikube dashboard
-
+4 Start all services with docker compose:
+	docker compose up -d
