@@ -1,11 +1,11 @@
 version: '3'
 secrets:
     WeatherAPIKey:
-      file: ./secret.py
+      file: ../secret.py
 services:
   kafka:
     build:
-      context: .
+      context: ./
       dockerfile: KafkaDockerfile.txt
     ports:
       - "9092:9092"
@@ -25,21 +25,22 @@ services:
 
   producer:
     build:
-      context: .
-      dockerfile: ProducerDockerfile.txt
+      context: ../
+      dockerfile: ./docker/ProducerDockerfile.txt
+    secrets:
+      - WeatherAPIKey
     depends_on:
       - kafka
     environment:
       KAFKA_BOOTSTRAP_SERVER: kafka:9092
       KAFKA_TOPIC: weather-data
       OTHER_ENV_VARIABLES: "if needed"
-    secrets:
-        - WeatherAPIKey
+
 
   consumer:
     build:
-      context: .
-      dockerfile: ConsumerDockerfile.txt
+      context: ../
+      dockerfile: ./docker/ConsumerDockerfile.txt
     depends_on:
       - kafka
     environment:

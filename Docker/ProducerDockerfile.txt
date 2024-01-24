@@ -11,7 +11,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the current directory contents into the container at /app
-COPY weather_processor.py .
+COPY ../weather_processor.py .
 
 # Specify the command to run on container start
 CMD ["python3", "weather_processor.py"]
