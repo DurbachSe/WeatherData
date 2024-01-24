@@ -6,7 +6,7 @@ from datetime import datetime
 from kafka import KafkaProducer #This may generate some problems with python 3.12:https://github.com/dpkp/kafka-python/issues/2412
 
 #use secret from python file | uncomment if needed
-from secret import OPENWEATHERMAP_API_KEY
+#from secret import OPENWEATHERMAP_API_KEY
 print('Starting .... ')
 time.sleep(8)  # 3give the kafka broker some time to start
 
@@ -28,26 +28,26 @@ def extract_api_key(api_key_string):
         return None
 
 #use secret in docker
-#secret_file_path = '/run/secrets/WeatherAPIKey'
-#
-#try:
-#  with open(secret_file_path, 'r') as file:
-#    api_key_from_secret = extract_api_key(file.read().strip())
+secret_file_path = '/run/secrets/WeatherAPIKey'
+
+try:
+  with open(secret_file_path, 'r') as file:
+    api_key_from_secret = extract_api_key(file.read().strip())
     #API Key should be loaded now, here a test:
     #print(f'The AOI key is: {api_key_from_secret}')
-#except FileNotFoundError:
-#  print(f'Secret file not found at {secret_file_path}')
-#except Exception as e:
-#  print(f'Error reading secret: str(e)')
+except FileNotFoundError:
+  print(f'Secret file not found at {secret_file_path}')
+except Exception as e:
+  print(f'Error reading secret: str(e)')
 
 # Get the OpenWeatherMap API key from the environment variable or secret from docker compose
-api_key = OPENWEATHERMAP_API_KEY
-#api_key = api_key_from_secret
+#api_key = OPENWEATHERMAP_API_KEY
+api_key = api_key_from_secret
 api_endpoint = "http://api.openweathermap.org/data/2.5/weather"
 city_name = "Larochette, LU"
 
 #Kafka Configuartion and Generate Kafka Producer
-kafka_bootstrap_servers = os.environ.get('KAFKA_BOOTSTRAP_SERVER', 'localhost:9092')
+kafka_bootstrap_servers = os.environ.get('KAFKA_BOOTSTRAP_SERVER', 'kafka:9092')
 kafka_topic = os.environ.get('KAFKA_TOPIC', 'weather-data')
 
 producer = KafkaProducer(
