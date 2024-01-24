@@ -8,10 +8,6 @@ Setup:
 2. Setup Docker:
 	https://docs.docker.com/engine/install/
 
-3. Build dockerfiles:
-	docker build PoducerDockerfile.txt .
-	docker build ConsumerDockerfile.txt .
-	docker build KafkaDockerfile.txt .
-
-4 Start all services with docker compose:
+3. Start all services with docker compose:
+	cd to the docker directory inside the project
 	docker compose up -d
