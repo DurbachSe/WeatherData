@@ -36,7 +36,7 @@ try:
     #API Key should be loaded now, here a test:
     #print(f'The AOI key is: {api_key_from_secret}')
 except FileNotFoundError:
-  print(f'Secret file not foiund at {secret_file_path}')
+  print(f'Secret file not found at {secret_file_path}')
 except Exception as e:
   print(f'Error reading secret: str(e)')
 
